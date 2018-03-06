@@ -50,7 +50,7 @@ public class InfiniteAdder {
             /*
              * We are going to make a new list and work backwards to the front As long as
              * any of the 2 numbers have more to go, take the number and put it in the
-             * "result" list 
+             * "result" list
              * if the added number is greater than 10, we can carry by making
              * the "prev" number bigger by 1
              */
@@ -126,7 +126,7 @@ public class InfiniteAdder {
             }
             System.out.println();
             System.out.println("Thanks for using my calculator!");
-            
+
         } catch (Exception nope) {
             System.out.println("Something went wrong: " + nope);
             nope.printStackTrace();
