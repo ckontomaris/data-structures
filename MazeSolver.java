@@ -1,11 +1,11 @@
 import java.io.*;
 import java.util.*;
 /**
-* Uses a stack of positions to solve a maze
-*
-* @author Chris Kontomaris
-* @version    3/3/18
-*/
+ * Uses a stack of positions to solve a maze
+ *
+ * @author Chris Kontomaris
+ * @version    3/3/18
+ */
 
 public class MazeSolver {
     public static void main(String[] args) {
@@ -14,13 +14,8 @@ public class MazeSolver {
             // [x,y]
 
             Scanner mazeFile = new Scanner(new BufferedReader(new FileReader("maze.txt")));
-            
-            
+
             //IMPORTING FILE
-            
-            
-            
-            // we need to determine rows and columns to make an array of the maze
             int rows= 0;
             int columns= 0;
 
@@ -30,14 +25,11 @@ public class MazeSolver {
                 mazeFile.nextLine();
                 rows++;
             }
-
             //resets the file
             mazeFile = new Scanner(new BufferedReader(new FileReader("maze.txt")));
-
             String firstRow= mazeFile.nextLine();
             //the number of columns in the first row
             columns = firstRow.length();
-
             //now we can use the String.charat method to take each char in the file
             mazeFile = new Scanner(new BufferedReader(new FileReader("maze.txt")));
             //make an array
@@ -58,19 +50,16 @@ public class MazeSolver {
                 System.out.println("");
             }
 
-            
-            
-            
             /* The algorithm:
-            *  Find start
-            *  Push position on Stack
-            *  Are you done? (You are on the finish spot), then stack has solution
-            *  If you can Go Up without backtracking, go to #2
-            *  If you can Go Down without backtracking, go to #2
-            *  If you can Go Left without backtracking, go to #2
-            *  If you can Go Right without backtracking, go to #2
-            *  Pop Position off Stack, go to #2 (if empty then maze is impossible)
-            */
+             *  Find start
+             *  Push position on Stack
+             *  Are you done? (You are on the finish spot), then stack has solution
+             *  If you can Go Up without backtracking, go to #2
+             *  If you can Go Down without backtracking, go to #2
+             *  If you can Go Left without backtracking, go to #2
+             *  If you can Go Right without backtracking, go to #2
+             *  Pop Position off Stack, go to #2 (if empty then maze is impossible)
+             */
 
             //FINDING THE START
             int [] currPos= new int[2];
@@ -84,39 +73,43 @@ public class MazeSolver {
                 }
             }
 
-            //push position to stack (or use linked list?)
+            //push position to stack 
+            //this stack contains all the past positions
             GenericStack<int []> positionStack = new GenericStack<int []>();
             positionStack.push(currPos);
-
-
-
-            //???start tracking all of our past positions
-            //maybe use ArrayList?
-            //int[][] pastPos= new
 
             //the big stuff
             //in here we will keep moving our position until we determine
             //the maze to be impossible
             boolean isPossible=true;
+
             while(!(isDone(mazeArray, positionStack.peek()))){
-                //use continue statement
 
+                if (canMove(mazeArray, currPos, "up")){
+                    currPos = Move(mazeArray,currPos, "up");
+                    positionStack.push(currPos);
+                } else if (canMove(mazeArray, currPos, "down")){
+                    currPos = Move(mazeArray,currPos, "down");
+                    positionStack.push(currPos);
+                } else if (canMove(mazeArray, currPos, "left")){
+                    currPos = Move(mazeArray,currPos, "left");
+                    positionStack.push(currPos);
+                } else if (canMove(mazeArray, currPos, "right")){
+                    currPos = Move(mazeArray,currPos, "right");
+                    positionStack.push(currPos);
+                } 
 
-                if(positionStack.peek()==null){
-                    isPossible=false;
+                if(!isPossible){
+                    System.out.println("That maze isn't possible");
                 }
             }
-
-            if(!isPossible){
-                System.out.println("That maze isn't possible");
-            }
-
-        } catch (Exception oof) {
+            
+            
+        }catch (Exception oof) {
             System.out.println(oof.getMessage());
             oof.printStackTrace();
         }
     }
-
 
     public static boolean isDone (String[][] maze, int [] position){
         int rows = position[0];
@@ -129,10 +122,10 @@ public class MazeSolver {
     }
 
     /**
-    * Returns an position array that moved in the given direction and not backtrack
-    * Still need to figure out how to store past positions effectively (use a linked list of pos []s and cycle through)
-    */
-    public static int[] Move (String[][] maze, int [] position, int [][] pastPos, String movement){
+     * Returns an position array that moved in the given direction and not backtrack
+     * Still need to figure out how to store past positions effectively (use a linked list of pos []s and cycle through)
+     */
+    public static int[] Move (String[][] maze, int [] position, String movement){
         //x,y
         //changed return type to int[], idk what i was  using this for before
         if(movement.equals("up")){
@@ -151,21 +144,40 @@ public class MazeSolver {
         System.out.println("I wasn't passed a direction");
         return position;
     }
+
     /**
-    * Determines if we can move in the given direction and not backtrack
-    * Still need to figure out how to store past positions effectively (use a linked list of pos []s and cycle through)
-    */
+     * Determines if we can move in the given direction and not hit a wall (or backtrack?)
+     * Still need to figure out how to store past positions effectively (use a linked list of pos []s and cycle through)
+     */
     public static boolean canMove (String[][] maze, int [] position,  String movement){
         //x,y
+        int x = position[0];
+        int y = position[1];
         //changed return type to int[], idk what i was  using this for before
         if(movement.equals("up")){
-            
+            if(maze[x][y+1].equals("#")){
+                return false;
+            } else {
+                return true;
+            }
         } else if( movement.equals("down")){
-            
+            if(maze[x][y-1].equals("#")){
+                return false;
+            } else {
+                return true;
+            }
         } else if( movement.equals("left")){
-            
+            if(maze[x-1][y].equals("#")){
+                return false;
+            } else {
+                return true;
+            }
         } else if( movement.equals("right")){
-            
+            if(maze[x+1][y].equals("#")){
+                return false;
+            } else {
+                return true;
+            }
         }
 
         return false;
