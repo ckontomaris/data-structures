@@ -1,47 +1,97 @@
 //BINARY SEARCH TREE
 //Greater numbers go to the right
+import java.*;
+public class BST<T> {
+	BSTNode<T> root = new BSTNode<T>();
+	BSTNode<T> curr = new BSTNode<T>();
 
-public class BST<T>{
-    BSTNode<T> root = new BSTNode<T>();
-    public void insert(T insertMe){
-        //insert object insertMe into the current tree 
-        //(if the tree is empty, it becomes the root)
-    }
-    public void inOrderPrint(){
-        //prints tree in in-order traversal order
-        //https://www.tutorialspoint.com/data_structures_algorithms/tree_traversal.htm
-        System.out.println();
-    }
-    public boolean exists(T checkMe){
-        //returns true if an element in the BST is equivalent to checkMe; 
-        //returns false otherwise.
-        
-        //traverse the tree, and use compare 
-        return false;
-    }
+	public void insert(T insertMe) {
+		if (root == null) {
+			root.set(insertMe);
+			return;
+		}
+
+		curr = root;
+		BSTNode<T> obj = new BSTNode<T>();
+		obj.set(insertMe);
+		while (curr != null) {
+			if (obj.getc().compareTo(curr.getc()) < 0) {
+				// LESS THAN
+				// move there, or make a new one
+				if (curr.getLeft() != null) {
+					curr = curr.getLeft();
+				} else {
+					curr.setLeft(obj);
+					return;
+				}
+			} else if (obj.getc().compareTo(curr.getc()) >= 0) {
+				// GREATER THAN OR EQUAL TO
+				if (curr.getRight() != null) {
+					curr = curr.getRight();
+				} else {
+					curr.setRight(obj);
+					return;
+				}
+			}
+		}
+
+	}
+
+	public void inOrderPrint() {
+		//start at root, recursively go all the way to the left, print, and then go right
+		printNode(root);
+	}
+	public void printNode(BSTNode<T> curr) {
+		if (curr == null) {
+			return;
+		}
+		printNode(curr.getLeft());
+		System.out.println(curr.get());
+		printNode(curr.getRight());
+		
+	}
+
+	public boolean exists(T checkMe) {
+
+		return false;
+	}
 }
-class BSTNode <X>
-{
-    X val;
-    BSTNode left;
-    BSTNode right;
 
-    BSTNode getLeft() {return left;}
+class BSTNode<X> {
+	X val;
+	BSTNode left;
+	BSTNode right;
 
-    BSTNode getRight() {return right;}
+	BSTNode getLeft() {
+		return left;
+	}
 
-    void setLeft(BSTNode bn) {left = bn;}
+	BSTNode getRight() {
+		return right;
+	}
 
-    void setRight(BSTNode bn) {right = bn;}
+	void setLeft(BSTNode bn) {
+		left = bn;
+	}
 
-    X get() {return val;}
+	void setRight(BSTNode bn) {
+		right = bn;
+	}
 
-    void set(X v) {val = v;}
+	X get() {
+		return val;
+	}
 
-    //need a version of get that returns a comparable object,
-    //because compareTo won't work on generic types by default
-    //use get when you need to access the value, use getc
-    //when you need to do a comparison
-    //This will crash if a non-comparable object is used.
-    Comparable getc() {return (Comparable) val;}
+	void set(X v) {
+		val = v;
+	}
+
+	// need a version of get that returns a comparable object,
+	// because compareTo won't work on generic types by default
+	// use get when you need to access the value, use getc
+	// when you need to do a comparison
+	// This will crash if a non-comparable object is used.
+	Comparable getc() {
+		return (Comparable) val;
+	}
 }
