@@ -1,11 +1,15 @@
 
 public class BST_Testing {
 	public static void main(String [] args) {
-		BST<String> ree = new BST<String>();
+		BST<Integer> ayy = new BST<Integer>();
 		
-		ree.insert("ree");
-		ree.insert("bee");
-		ree.insert("cee");
-		ree.inOrderPrint();
+		ayy.insert(1);
+		ayy.insert(23);
+		ayy.insert(0);
+		ayy.insert(134);
+		ayy.insert(-23);
+		ayy.insert(21);
+		ayy.insert(123123);
+		ayy.inOrderPrint();
 	}
 }

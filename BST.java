@@ -1,97 +1,103 @@
-//BINARY SEARCH TREE
-//Greater numbers go to the right
-import java.*;
-public class BST<T> {
-	BSTNode<T> root = new BSTNode<T>();
-	BSTNode<T> curr = new BSTNode<T>();
+public class BST <T> {
+    BSTNode root;
 
-	public void insert(T insertMe) {
-		if (root == null) {
-			root.set(insertMe);
-			return;
-		}
+    public void insert(T insertMe) {
+        // root is a special case
+        if (root == null) {
+            root = new BSTNode();
+            root.set(insertMe);
+        } else {
+            insert_re(root, insertMe);
+        }
+    }
 
-		curr = root;
-		BSTNode<T> obj = new BSTNode<T>();
-		obj.set(insertMe);
-		while (curr != null) {
-			if (obj.getc().compareTo(curr.getc()) < 0) {
-				// LESS THAN
-				// move there, or make a new one
-				if (curr.getLeft() != null) {
-					curr = curr.getLeft();
-				} else {
-					curr.setLeft(obj);
-					return;
-				}
-			} else if (obj.getc().compareTo(curr.getc()) >= 0) {
-				// GREATER THAN OR EQUAL TO
-				if (curr.getRight() != null) {
-					curr = curr.getRight();
-				} else {
-					curr.setRight(obj);
-					return;
-				}
-			}
-		}
+    /**
+     * recursive method called by insert
+     */
+    private void insert_re(BSTNode n, T ins) {
+        // compare what we want to insert with current node value using compareTo
+        if (n.getc().compareTo(ins) > 0) {
+            //LESS THAN
+            if (n.getLeft() == null) {
+                n.setLeft(new BSTNode());
+                n = n.getLeft();
+                n.set(ins);
+            } else {
+                insert_re(n.getLeft(),ins);
+            }
+        } else {
+            //GREATER THAN OR EQUAL TO
+            if (n.getRight() == null) {
+                n.setRight(new BSTNode());
+                n = n.getRight();
+                n.set(ins);
+            } else {
+                insert_re(n.getRight(),ins);
+            }
+        }
+    }
 
-	}
+    /**
+     * print the whole tree in order
+     */
+    public void inOrderPrint() {
+        inOrderPrint_re(root);
+    }
+    
+    private void inOrderPrint_re(BSTNode n) {
+        if (n == null) { return; }
+        inOrderPrint_re(n.getLeft());
+        System.out.println(n.get());
+        inOrderPrint_re(n.getRight());
+    }
 
-	public void inOrderPrint() {
-		//start at root, recursively go all the way to the left, print, and then go right
-		printNode(root);
-	}
-	public void printNode(BSTNode<T> curr) {
-		if (curr == null) {
-			return;
-		}
-		printNode(curr.getLeft());
-		System.out.println(curr.get());
-		printNode(curr.getRight());
-		
-	}
+    /**
+     * Just for fun, this version of exists will be NOT recursive
+     */
+    public boolean exists(T checkMe) {
+        BSTNode curr = root;
+        //when we use a loop, we need a curr
+        while (curr != null) {
+            if (curr.getc().compareTo(checkMe) == 0) {
+                return true;
+            } else if (curr.getc().compareTo(checkMe) > 0) {
+                // curr > checkMe, go left
+                curr = curr.getLeft();
+            } else {
+                curr = curr.getRight();
+            }
+        }
+        // if we reach the end of the loop without returning, checkMe isn't in
+        // the tree
+        return false;
+    }
+    public void printTree(){
+        //we need to change  insert and BSTNode to have a level 
+        
+        //make a queue 
+    }
+    public void balance(){
+        //now when we balance, we need to make sure the levels work
+    }
+    
+    
 
-	public boolean exists(T checkMe) {
+    public class BSTNode {
+        T value;
+        BSTNode left;
+        BSTNode right;
+        public T get() { return value; }
 
-		return false;
-	}
-}
+        public Comparable getc() { return (Comparable) value; }
 
-class BSTNode<X> {
-	X val;
-	BSTNode left;
-	BSTNode right;
+        public void set (T val) { value = val; }
 
-	BSTNode getLeft() {
-		return left;
-	}
+        public BSTNode getLeft() { return left; }
 
-	BSTNode getRight() {
-		return right;
-	}
+        public void setLeft(BSTNode par) { left = par; }
 
-	void setLeft(BSTNode bn) {
-		left = bn;
-	}
+        public BSTNode getRight() { return right; }
 
-	void setRight(BSTNode bn) {
-		right = bn;
-	}
-
-	X get() {
-		return val;
-	}
-
-	void set(X v) {
-		val = v;
-	}
-
-	// need a version of get that returns a comparable object,
-	// because compareTo won't work on generic types by default
-	// use get when you need to access the value, use getc
-	// when you need to do a comparison
-	// This will crash if a non-comparable object is used.
-	Comparable getc() {
-		return (Comparable) val;
-	}
+        public void setRight(BSTNode par) { right = par; }
+    }
 }
